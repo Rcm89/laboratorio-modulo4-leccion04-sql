@@ -185,14 +185,28 @@ FROM (
     SELECT id_municipio, COUNT(id_local) AS numero_de_locales
     FROM lugares
     GROUP BY id_municipio
-) AS conteo
+) AS conteo_de_municipios
 ORDER BY numero_de_locales DESC
 LIMIT 1;
 
-
 --4.5. Obtén los municipios muya media de sensación térmica sea mayor que la media total.
 
+SELECT municipio_id 
+FROM clima
+GROUP BY municipio_id
+HAVING AVG(sensacion) > (
+    SELECT AVG(sensacion)
+    FROM clima
+);
+
 --4.6. Selecciona los municipios con más de dos fuentes.
+
+SELECT id_municipio
+FROM lugares
+WHERE categoria = 'Fountain'
+GROUP BY id_municipio
+HAVING COUNT(id_local) > 2;
+
 
 --4.7. Localiza la dirección de todos los estudios de cine que estén abiertod en el municipio de "Madrid".
 
