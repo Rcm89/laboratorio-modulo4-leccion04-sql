@@ -150,7 +150,55 @@ CREATE TEMPORARY TABLE cielo_repetido_frecuencia as
 
 --Ejercicio 4. SUBQUERIES
 
+--4.1. Necesitamos comprobar si hay algún municipio en el cual no tenga ningún local registrado.
 
+SELECT id_municipio
+FROM municipios
+WHERE id_municipio NOT IN (
+    SELECT DISTINCT id_municipio 
+    FROM lugares
+);
+
+
+--4.2. Averigua si hay alguna fecha en la que el cielo se encuente "Muy nuboso con tormenta".
+
+SELECT DISTINCT fecha
+FROM clima
+WHERE cielo = 'Muy nuboso con tormenta';
+
+
+--4.3. Encuentra los días en los que los avisos sean diferentes a "Sin riesgo".
+--Quité la columna de avisos así que lo voy a hacer con dirección del viento SO
+
+SELECT DISTINCT fecha
+FROM (
+    SELECT fecha, direccion_viento
+    FROM clima
+) AS subconsulta
+WHERE subconsulta.direccion_viento = 'SO';
+
+
+--4.4. Selecciona el municipio con mayor número de locales.
+
+SELECT id_municipio
+FROM (
+    SELECT id_municipio, COUNT(id_local) AS numero_de_locales
+    FROM lugares
+    GROUP BY id_municipio
+) AS conteo
+ORDER BY numero_de_locales DESC
+LIMIT 1;
+
+
+--4.5. Obtén los municipios muya media de sensación térmica sea mayor que la media total.
+
+--4.6. Selecciona los municipios con más de dos fuentes.
+
+--4.7. Localiza la dirección de todos los estudios de cine que estén abiertod en el municipio de "Madrid".
+
+--4.8. Encuentra la máxima temperatura para cada tipo de cielo.
+
+--4.9. Muestra el número de locales por categoría que muy probablemente se encuentren abiertos.
 
 
 
