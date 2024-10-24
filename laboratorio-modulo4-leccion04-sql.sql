@@ -150,6 +150,8 @@ CREATE TEMPORARY TABLE cielo_repetido_frecuencia as
 
 --Ejercicio 4. SUBQUERIES
 
+-- He intentado usar subqueries siempre que he sido capaz, en algunos no sabía como hacerlo.
+
 --4.1. Necesitamos comprobar si hay algún municipio en el cual no tenga ningún local registrado.
 
 SELECT id_municipio
@@ -174,8 +176,8 @@ SELECT DISTINCT fecha
 FROM (
     SELECT fecha, direccion_viento
     FROM clima
-) AS subconsulta
-WHERE subconsulta.direccion_viento = 'SO';
+) 
+WHERE direccion_viento = 'SO';
 
 
 --4.4. Selecciona el municipio con mayor número de locales.
@@ -185,7 +187,7 @@ FROM (
     SELECT id_municipio, COUNT(id_local) AS numero_de_locales
     FROM lugares
     GROUP BY id_municipio
-) AS conteo_de_municipios
+)
 ORDER BY numero_de_locales DESC
 LIMIT 1;
 
@@ -210,9 +212,27 @@ HAVING COUNT(id_local) > 2;
 
 --4.7. Localiza la dirección de todos los estudios de cine que estén abiertod en el municipio de "Madrid".
 
+SELECT direccion
+FROM lugares
+WHERE categoria = 'Film Studio'
+AND estado = 'LikelyOpen' OR estado = 'VeryLikelyOpen'
+AND id_municipio = (
+    SELECT id_municipio 
+    FROM municipios 
+    WHERE id_municipio = 'Madrid');
+   
 --4.8. Encuentra la máxima temperatura para cada tipo de cielo.
+   
+SELECT cielo, MAX(temperatura) AS maxima_temperatura
+FROM clima
+GROUP BY cielo;
 
 --4.9. Muestra el número de locales por categoría que muy probablemente se encuentren abiertos.
+
+SELECT categoria, COUNT(*) AS numero_de_locales
+FROM lugares
+WHERE estado = 'VeryLikelyOpen'
+GROUP BY categoria;
 
 
 
